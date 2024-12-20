@@ -46,9 +46,13 @@ $("#analyzer").click(function(){
 
     var news = document.getElementById("inputbox").value
 
-    let data = {
+    if (news == ""){
+      alert("Input is empty!")
+    }
+
+    else{let data = {
       news: news
-  };
+    };
      
   let json = JSON.stringify(data);
   
@@ -62,13 +66,15 @@ $("#analyzer").click(function(){
     .then(response => response.json())
     .then(data => console.log(data)) 
     .catch(error => console.error(error));
-    get_track_js()
+    get_track_js()}
+
+    
 })
 
 async function get_track_js() {
   let response = await fetch("/data");
   let data = await response.json();
-  getresult(data[0])
+  getresult(data.result)
 }
 
 function getresult(conf){
@@ -81,7 +87,7 @@ function getresult(conf){
     setTimeout(function(){
       document.getElementById("analyzer").innerHTML = "";
       setTimeout(function(){
-        document.getElementById("analyzer").innerHTML = "<p style = 'font-family: hndb'>Confidence That News is Fake: "+conf[0];
+        document.getElementById("analyzer").innerHTML = "<p style = 'font-family: hndb'>Confidence That News is Fake: "+(Math.round(conf * 100) /100);
       }, 1500)
     }, 1000)
   }, 5000)
